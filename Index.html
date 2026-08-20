@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Counter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            min-height: 100vh;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: #111;
+            border-radius: 24px;
+            padding: 40px 30px;
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            text-align: center;
+            box-shadow: 0 0 60px rgba(168, 85, 247, 0.05);
+        }
+        .counter-display {
+            font-size: 120px;
+            font-weight: 900;
+            color: #e5e7eb;
+            margin: 10px 0 20px;
+            transition: 0.2s;
+            user-select: none;
+            line-height: 1;
+        }
+        .counter-display.pop {
+            transform: scale(1.15);
+            color: #a855f7;
+        }
+        .btn-tap {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 24px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            letter-spacing: 1px;
+        }
+        .btn-tap:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.2);
+        }
+        .btn-tap:active {
+            transform: scale(0.95);
+        }
+        .btn-reset {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: #6b7280;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            margin-top: 12px;
+        }
+        .btn-reset:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="counter-display" id="counterDisplay">0</div>
+
+        <button class="btn-tap" id="tapBtn">+1</button>
+        <button class="btn-reset" id="resetBtn">↺</button>
+
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'tapCounter';
+
+        const counterDisplay = document.getElementById('counterDisplay');
+        const tapBtn = document.getElementById('tapBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        let count = parseInt(localStorage.getItem(STORAGE_KEY)) || 0;
+        updateDisplay();
+
+        tapBtn.addEventListener('click', function() {
+            count++;
+            saveAndUpdate();
+            animateDisplay();
+        });
+
+        resetBtn.addEventListener('click', function() {
+            if (confirm('Reset?')) {
+                count = 0;
+                saveAndUpdate();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && !e.repeat) {
+                e.preventDefault();
+                count++;
+                saveAndUpdate();
+                animateDisplay();
+            }
+        });
+
+        function saveAndUpdate() {
+            localStorage.setItem(STORAGE_KEY, count);
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            counterDisplay.textContent = count;
+        }
+
+        function animateDisplay() {
+            counterDisplay.classList.add('pop');
+            setTimeout(() => {
+                counterDisplay.classList.remove('pop');
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
